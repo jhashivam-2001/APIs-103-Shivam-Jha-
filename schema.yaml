@@ -1,0 +1,122 @@
+openapi: 3.0.0
+info:
+  version: v0.2.0
+  title: Article API
+  description: "This is an API for managing details of blogging website."
+servers:
+  - url: "localhost:3000"
+paths:
+  /articles:
+    get:
+      summary: Articles fetching call.
+      operationId: getArticles
+      tags:
+        - Articles
+      responses:
+        "200":
+          description: Articles
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/ArticleListing"
+    post:
+      summary: Article insertion.
+      operationId: addArticle
+      tags:
+        - Article
+      requestBody:
+        required: true
+        description: Article
+        content:
+          text/plain:
+            schema:
+              $ref: "#/components/schemas/Article"
+      responses:
+        "201":
+          description: Article added.
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Article"
+    delete:
+      summary: All articles deleted.
+      operationId: deleteArticle
+      tags:
+        - Article
+      responses:
+        "200":
+          description: All articles deleted.
+  /articles/{articleTitle}:
+    get:
+      summary: Get particular topic.
+      operationId: getArticle
+      parameters:
+        - name: articleTitle
+          in: path
+          description: The topic name.
+          required: true
+          schema:
+            type: string
+      tags:
+        - Article
+      responses:
+        "200":
+          description: Article
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Article"
+    put:
+      summary: Update an Article.
+      operationId: updateArticle
+      parameters:
+        - name: articleTitle
+          in: path
+          description: The topic name.
+          required: true
+          schema:
+            type: string
+      tags:
+        - Article
+      requestBody:
+        description: Article
+        content:
+          text/plain:
+            schema:
+              $ref: "#/components/schemas/Article"
+      responses:
+        "204":
+          description: Article updated.
+    delete:
+      summary: Particular article delete.
+      operationId: deleteArticle
+      parameters:
+        - name: articleTitle
+          in: path
+          description: The topic name.
+          required: true
+          schema:
+            type: string
+      tags:
+        - Article
+      responses:
+        "204":
+          description: Article deleted.
+components:
+  schemas:
+    ArticleListing:
+      type: array
+      items:
+        $ref: "#/components/schemas/Article"
+    Article:
+      type: object
+      required:
+        - title
+        - content
+      properties:
+        title:
+          description: Unique topic name for the article.
+          type: string
+        content:
+          description: The article content goes here.
+          type: string
